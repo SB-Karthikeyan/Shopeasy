@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" href="/static/images/website-icon.png">
+    <link rel="stylesheet" href="/static/style.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Shopeasy - Product</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <div id="preloader-page">
+        <div class="video">
+            <video src="/static/images/logo-preloader.mp4" autoplay muted loop playsinline></video>
+        </div>
+    </div>
+    <header>
+        <a href="/"><div class="logo">ShopEasy</div></a>
+        <nav class="icons">
+            <span class="search-container" id="search-container">
+                <input type="text" id="searchInput" onkeyup="searchProducts()" placeholder="Search products...">
+                <i tabindex="0" id="searchIcon" class="fa-solid fa-magnifying-glass"></i>
+            </span>
+            <button id="filter-icon" class="filter">
+                <i class="fa-solid fa-filter"></i>
+            </button>
+            <button class="user-icon">
+                <i class="fa-solid fa-user"></i>
+                <div class="option">
+                    <a href="/profile">Profile <span>></span></a>
+                    <a href="/registration">Registration/Login <span>></span></a>
+                    <a href="/logout">Logout <span>></span></a>
+                </div>
+            </button>
+            {% if not role == 'admin' %}
+                <button class="cart" id="header-cart-icon">
+                    <i class="fa-solid fa-cart-shopping"><span id="cart-product-count">0</span></i>
+                </button>
+            {% endif %}
+        </nav>
+    </header>
+
+
+    <div id="products-container"></div>
+
+    <div id="no-result-msg">No products found related to your search, Check your spelling or Try with some other words!!</div>
+    <div id="no-filter-result-msg">No products found related to your filter, Try with some other option!!</div>
+
+    <div id="filter-section" class="filter-section">
+        <i id="cart-close" class="fa-solid fa-close"></i>
+        <div class="filter-content">
+            <details class="filter-by-type">
+                <summary>Filter by Product type<span>></span></summary>
+                <div class="filter-option">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>Regular</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>Offer</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>New</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>Flash</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>Popular</p>
+                    </label>
+                </div>           
+            </details>
+            <details class="filter-by-rating">
+                <summary>Filter by Rating<span>></span></summary>
+                <div class="filter-option">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>4 star and above</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>3 star and above</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>2 star and above</p>
+                    </label>
+                </div>           
+            </details>
+            <details class="filter-by-price">
+                <summary>Filter by Price<span>></span></summary>
+                <div class="filter-option">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>15000 and above</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>10000 - 15000</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>8000 - 10000</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>5000 - 8000</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>1000 - 5000</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>1000 and below</p>
+                    </label>
+                </div>           
+            </details>
+            <details class="filter-by-category">
+                <summary>Filter by Category<span>></span></summary>
+                <div class="filter-option">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-category-checkmark"></span><p>Electronics</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-category-checkmark"></span><p>Fashion</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-category-checkmark"></span><p>Home & Kitchen</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-category-checkmark"></span><p>Healthcare</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-category-checkmark"></span><p>Automobile</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-category-checkmark"></span><p>Furniture</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-category-checkmark"></span><p>Travel</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-category-checkmark"></span><p>Safety</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-category-checkmark"></span><p>Home Security</p>
+                    </label>
+                </div>           
+            </details>
+            <details class="filter-by-stock">
+                <summary>Filter by Availability<span>></span></summary>
+                <div class="filter-option">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>In Stock</p>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" class="checkbox">
+                        <span class="product-type-checkmark"></span><p>Out of Stock</p>
+                    </label>
+                </div>           
+            </details>
+        </div>
+    </div>
+
+
+    <div id="cart-section" class="cart-section">
+        <i id="cart-close" class="fa-solid fa-close"></i>
+        <div id="cart-products"></div>
+        
+        <div class="cart-buttons">
+            <button id="clear-cart" class="clear-cart">Clear</button>
+            <a class="button" href="/checkout">Checkout</a>
+        </div>
+    </div>
+
+    <script src="/static/script.js" defer></script>
+</body>
+</html>

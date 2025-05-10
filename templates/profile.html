@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ShopEasy-Profile</title>
+    <link rel="icon" href="/static/images/website-icon.png">
+    <link rel="stylesheet" href="/static/style.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
+    <main class="profile-container">
+        <div class="password">
+            <i class="fa-solid fa-close"></i>
+            <div class="options">
+                <form action="/update-password" method="POST">
+                    <h2>Change the password <br> Whenever you want!</h2>
+                    <div class="password-icon">
+                        <input class="password-field" id="old-password" name="old-password" type="password" placeholder="Old Password" autocomplete="off" required tabindex="-1">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <div class="password-icon">
+                        <input class="password-field" id="new-password" name="new-password" type="password" placeholder="New Password" autocomplete="off" required tabindex="-1" minlength="8">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <div class="password-icon">
+                        <input class="password-field" id="con-new-password" name="con-new-password" type="password" placeholder="Confirm New Password" autocomplete="off" required tabindex="-1" minlength="8">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <button class="btn" type="submit" tabindex="-1">Change Password</button>
+                    <p>Forget your current password?<br>Write a mail to us..<br>(customercare@shopeasy.com)</p>
+                </form>
+            </div>
+        </div>
+        <div class="image">
+            <a href="/"><i class="fa-solid fa-arrow-left"></i></a>
+            <img src="/static/images/website-icon.png" alt="website-icon">
+        </div>
+        <div class="personal-info">
+            <h2>Profile Details</h2>
+            <h3>Username : </h3>
+            <p>{{ user.username }}</p>
+            <h3>Email : </h3>
+            <p>{{ user.email }}</p>
+            <i class="password-text">Change Password</i>
+            <a href="/logout" class="logout">Logout</a>
+            <div class="remove-account-div">
+                <i class="remove-account">Remove Account</i>
+                <div class="confirm-box">
+                    <p>Are you sure you want to delete your account?<br>Once done, It cannot be recoverd.</p>
+                    <i class="option no">No</i>
+                    <a href="/remove-account" class="option yes">Yes</a>
+                </div>
+            </div>
+        </div>
+        <div class="shipping-address">
+            <h2>Address Details</h2>
+            <label for="address">Shipping Address:</label><br>
+            <p id="address">{{ address }}</p>
+            <form id="addressForm" action="/update-address" method="POST" style="display: none;">
+              <textarea id="address" name="address" rows="4" cols="50" placeholder="Please enter the address with pincode!!" required>{{ address }}</textarea><br><br>
+              <a href="/profile" class="back">Back</a>
+              <button type="submit" class="save-address">Save Address</button>
+            </form>
+            <button id="toggleAddressBtn">Add / Edit Address</button>
+        </div>
+        <div class="order-history">
+            <h2>Order History<i class="fa-solid fa-refresh" onclick="loadOrders()"><span>(Refresh to get updated history)</span></i></h2>
+            <div id="order-container"></div>
+        </div>
+    </main>
+    <script src="/static/profile&admin.js"></script>
+    <script>
+        const toggleBtn = document.getElementById("toggleAddressBtn");
+        const addressForm = document.getElementById("addressForm");
+        const address = document.getElementById('address');
+      
+        toggleBtn.addEventListener("click", () => {
+            addressForm.style.display = addressForm.style.display === "none" ? "block" : "none";
+            toggleBtn.style.display='none';
+            address.style.display = 'none';
+        });
+            
+      </script>
+</body>
+</html>
