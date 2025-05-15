@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="icon" href="/static/images/website-icon.png">
+        <link rel="stylesheet" href="/static/style.css" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <title>Add Product</title>
+    </head>
+</head>
+<body>
+    <div id="preloader-page">
+        <div class="video">
+            <video src="/static/images/logo-preloader.mp4" autoplay muted loop playsinline></video>
+        </div>
+    </div>
+
+    <div class="product-form">
+        <form method="post" class="form" action="/add_product">
+            <h1>Add Product</h1>
+            <div class="form-columns">
+                <div class="form-left">
+                    <label>
+                        Name:
+                        <input type="text" name="name" required>
+                    </label>
+                    <label>
+                        Description:
+                        <textarea name="description"></textarea>
+                    </label>
+                    <label for="category">
+                        Category:
+                        <select name="category" id="category" required>
+                            <option>Select</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Home & Kitchen">Home & Kitchen</option>
+                            <option value="Fitness">Fitness</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Automobile">Automobile</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Furniture">Furniture</option>
+                            <option value="Home Security">Home Security</option>
+                            <option value="Safety">Safety</option>
+                        </select>
+                    </label>
+                    <label for="stock">
+                        Stock:
+                        <select name="stock" id="stock" required>
+                            <option>Select</option>
+                            <option value="In Stock">In Stock</option>
+                            <option value="Out of Stock">Out of Stock</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="form-right">
+                    <label>
+                        Price:
+                        <input type="text" name="price" maxlength="6"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                    </label>
+                    <label>
+                        MRP:
+                        <input type="text" name="mrp" maxlength="6"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                    </label>
+                    <label for="product_type">
+                        Product Type:
+                        <select name="product_type" id="product_type" required>
+                            <option>Select</option>
+                            <option value="Popular">Popular</option>
+                            <option value="Regular">Regular</option>
+                            <option value="Flash">Flash</option>
+                            <option value="Offer">Offer</option>
+                        </select>
+                    </label>
+                    <label>
+                        Image URL:
+                        <input type="text" name="image_url" required>
+                    </label>
+                </div>
+            </div>
+            <button type="submit">Add</button>
+            <a href="{{ url_for('products_page') }}">Back to Products</a>
+        </form>
+    </div>
+    
+    <script src="/static/script.js"></script>
+</body>
+</html>

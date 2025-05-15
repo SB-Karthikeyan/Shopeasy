@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="/static/style.css" type="text/css">
+    <link rel="icon" href="/static/images/website-icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Shopeay - Product Detail</title>
+</head>
+<body>
+    <header>
+        <a href="/"><div class="logo">ShopEasy</div></a>
+        <nav class="icons">
+            <a href="/products"><i class="fa-solid fa-shop"></i></a>
+            <button class="user-icon">
+                <i class="fa-solid fa-user"></i>
+                <div class="option">
+                    <a href="/profile">Profile <span>></span></a>
+                    <a href="/registration">Registration/Login <span>></span></a>
+                    <a href="/logout">Logout <span>></span></a>
+                </div>
+            </button>
+            {% if not role == 'admin' %}
+                <button class="cart" id="header-cart-icon">
+                    <i class="fa-solid fa-cart-shopping"><span id="cart-product-count">0</span></i>
+                </button>
+            {% endif %}
+            </nav>
+    </header>
+
+    <main id="product-detail-container">
+        <div class="detail-container">
+            <div class="product-image">
+               <img src="{{ product.image_url }}" alt="{{ product.name }}">
+            </div>
+            <div class="product {{ product.product_type }}">
+                <div class="header">
+                    <p class="type">{{ product.product_type }} Sale</p>
+                    <h2>{{ product.name }}</h2>
+                </div>
+                <p>{{ product.description }}</p>
+                <p class="price-rating">
+                    <span>Price : Rs.{{ product.price }}</span>
+                    <span class="mrp">MRP : Rs.{{ product.mrp }}</span>
+                    <span class="rating">Overall Rating : {{product.rating}}</span>
+                </p>
+                <div class="pincode-check">
+                    <label>
+                        Check Delivery Availability:
+                        <input type="text" id="pincode" placeholder="Enter Pincode" maxlength="6">
+                        <button type="button" onclick="checkDelivery()">Check</button>
+                    </label>
+                    <p id="delivery-status"></p>
+                </div>                
+                <a class="add-to-cart-icon" onclick="addToCart('{{ product.id }}','{{ product.name }}','{{ product.image_url }}','{{ product.price }}')">Add to cart</a>
+            </div>
+        </div>
+    </main>
+
+    <div id="cart-section" class="cart-section">
+        <i id="cart-close" class="fa-solid fa-close"></i>
+        <div id="cart-products"></div>
+        
+        <div class="cart-buttons">
+            <button id="clear-cart">Clear</button>
+            <a class="button" href="/checkout">Checkout</a>
+        </div>
+    </div>
+    
+    <script src="/static/script.js" defer></script>
+    <script>
+        function checkDelivery() {
+            const pincode = document.getElementById("pincode").value;
+            const status = document.getElementById("delivery-status");
+    
+            if (!/^\d{6}$/.test(pincode)) {
+                status.textContent = "Please enter a valid 6-digit pincode.";
+                status.style.color = "red";
+                return;
+            }
+    
+            fetch(`/check-delivery?pincode=${pincode}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.available) {
+                        status.textContent = "Delivery is available to this pincode!";
+                        status.style.color = "green";
+                    } else {
+                        status.textContent = "Sorry, we do not deliver to this pincode.";
+                        status.style.color = "red";
+                    }
+                })
+                .catch(() => {
+                    status.textContent = "Error checking delivery. Try again.";
+                    status.style.color = "orange";
+                });
+        }
+    </script>
+    
+</body>
+</html>

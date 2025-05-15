@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ShopEasy</title>
+    <link rel="icon" href="/static/images/website-icon.png">
+    <link rel="stylesheet" href="/static/style.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <script src="/static/script.js"></script>
+</head>
+<body>
+    <!-- <div id="preloader-page">
+        <div class="video">
+            <video src="/static/images/logo-preloader.mp4" autoplay muted loop playsinline></video>
+        </div>
+    </div> -->
+
+    <div class="heading">
+        <a href="/products"><i class="fa-solid fa-arrow-left" ></i></a>
+        <h2>Summary</h2>
+        <a href="/order-products" id="Order-button" class="order-button">Place Order</a>
+    </div>
+
+    <div class="ordered-page">
+        <div class="msg-card">
+            <h2>ShopEasy</h2>
+            <div class="checkmark-circle">
+                <div class="checkmark"></div>
+            </div>
+            <h2>Thank you!</h2>
+            <h2>Order placed Successfully.</h2>
+            <i><i class="fa-solid fa-circle-info" style="margin-right: 5px;"></i>We will notify, once shipping process starts.</i>
+            <a id="back" href="/products">Back</a>
+        </div>
+    </div>
+    <main class="checkout-container">
+        <div class="product">
+            <div class="title">
+                <h3>Image</h3>
+                <h3>Name</h3>
+                <h3>Price</h3>
+                <h3>Qty</h3>
+                <h3>Total</h3>
+            </div>
+            <div id="chkout-product"></div>
+            <div id="total-chkout-product"></div>
+        </div>
+
+    </main>
+
+    <script>
+        document.getElementById('Order-button').addEventListener('click', function (e) {
+            e.preventDefault();
+        
+            fetch('/order-products')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        setTimeout(() => {
+                            document.querySelector('.ordered-page').style.display = 'flex';
+                        }, 500);
+                    } else {
+                        alert('Order could not be placed.');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error placing order:', err);
+                    alert('Something went wrong.');
+                });
+        });
+        
+        document.getElementById('back').addEventListener('click', ()=> {
+            localStorage.clear();
+        });
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const cart = await loadCart();  // wait for cart data to load
+            renderCart(cart);               // then render
+        });
+        
+        document.addEventListener('click', function(e){
+            const target = e.target;
+            if(target.classList.contains('order-button')){
+                fetch('/cart', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: [] })
+                })
+                .then(response => response.json())
+                .then(result => console.log('Server cart cleared:', result))
+                .catch(error => console.error('Error clearing server cart:', error));    
+            }
+        });
+        
+        async function loadCart() {
+            try {
+                const sessionResponse = await fetch('/session/data');
+                const session = await sessionResponse.json();
+        
+                if (session.logged_in) {
+                    const cartResponse = await fetch('/api/cart/products');
+                    const serverCart = await cartResponse.json();
+                    return serverCart.map(item => ({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        url: item.image_url,
+                        quantity: item.quantity
+                    }));
+                }
+            } catch (err) {
+                console.error('Failed to load cart:', err);
+            }
+        
+            return []; // fallback if anything goes wrong
+        }
+        
+        function renderCart(cart) {
+            let total = 0;
+            let qtyCount = 0;
+        
+            if (cart.length > 0) {
+                const productsHTML = cart.map(item => {
+                    const totalPrice = item.price * item.quantity;
+                    total += totalPrice;
+                    qtyCount += item.quantity;
+        
+                    return `
+                        <div class="product-details">
+                            <div class="image">
+                                <img src="${item.url}" alt="${item.name}">
+                            </div>
+                            <p class="name">${item.name}</p>
+                            <p class="price">Rs. ${item.price}</p> 
+                            <p class="qty">${item.quantity}</p>
+                            <p class="price">Rs. ${totalPrice}</p>
+                        </div>
+                    `;
+                }).join("");
+        
+                const totalHTML = `
+                    <div class="total">
+                        <h3>Grand Total</h3>
+                        <p><strong>${qtyCount}</strong></p>
+                        <p class="price"><strong>Rs. ${total}</strong></p>
+                    </div>
+                `;
+        
+                document.getElementById("chkout-product").innerHTML = productsHTML;
+                document.getElementById("total-chkout-product").innerHTML = totalHTML;
+            } else {
+                document.querySelector('.title').style.display = 'none';
+                document.getElementById("chkout-product").innerHTML = `
+                    <div class="no-products">
+                        <p>No products found on cart!!</p>
+                        <a id="back" href="/products">Back</a>
+                    </div>
+                `;
+                document.getElementById('Order-button').style.pointerEvents = 'none';
+                document.getElementById('Order-button').style.opacity = '0.5';
+            }
+        }
+        
+      </script>
+</body>
+</html>

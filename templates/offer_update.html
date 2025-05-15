@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="icon" href="/static/images/website-icon.png">
+        <link rel="stylesheet" href="/static/style.css" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <title>Offer Update</title>
+        <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        </style>
+    </head>
+</head>
+<body>
+    <div id="preloader-page">
+        <div class="video">
+            <video src="/static/images/logo-preloader.mp4" autoplay muted loop playsinline></video>
+        </div>
+    </div>
+    <div class="offer_form_page">
+        <div class="form">
+            <h2>Set Global Offer for All Products</h2>
+            <form method="POST" action="/offer_update" class="offer_form">
+                <label>Offer Percentage:
+                    <input type="number" name="offer_percentage" value="40" min="0" max="60" required>
+                </label>
+                <button type="submit">Apply Offer to All Products (2-day expiry)</button>
+            </form>
+        </div>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>

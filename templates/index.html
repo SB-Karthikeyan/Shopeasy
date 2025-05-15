@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ShopEasy</title>
+    <link rel="icon" href="/static/images/website-icon.png">
+    <link rel="stylesheet" href="/static/style.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <header>
+        <a href="/"><div class="logo">ShopEasy</p></div></a>
+        <nav class="icons">
+            <a href="/products"><i class="fa-solid fa-shop"></i></a>
+            <button class="user-icon">
+                <i class="fa-solid fa-user"></i>
+                <div class="option">
+                    <a href="/profile">Profile<span>></span></a>
+                    <a href="/registration">Registration/Login <span>></span></a>
+                    <a href="/logout">Logout <span>></span></a>
+                </div>
+            </button>
+            {% if not role == 'admin' %}
+                <button class="cart" id="header-cart-icon">
+                    <i class="fa-solid fa-cart-shopping"><span id="cart-product-count">0</span></i>
+                </button>
+            {% endif %}
+        </nav>
+    </header>
+
+
+    <main id="index-container">
+        <div class="banner">
+            <div class="content">
+                <h1>FLASH SALE HAPPENNING!!!<br><span>GET UPTO {{ offer_percentage }}%</span> OFF ON EVERY PURCHASE!!!</h1>
+                <a href="/products">Shop now <i class="fa-solid fa-arrow-right"></i></a>
+                <h3>Expires on {{ offer_expiry }}</h3>
+            </div>
+            <div class="image">
+                <img src="/static/images/index-page/banner.jpg" alt="banner">
+            </div>
+        </div>
+        <div class="about">
+            <div class="image">
+                <img src="/static/images/index-page/about-banner.jpg" alt="about-banner">
+            </div>
+            <div class="content">
+                <h2>About our Products...</h2>
+                <p>Our products are crafted with care and precision, designed to meet the highest standards of quality and durability. Each item is carefully selected to offer both style and functionality, ensuring you enjoy a seamless experience every time.<br><br>
+                    We are committed to bringing you products that blend innovation, craftsmanship, and value. Every product is a testament to our dedication to excellence and your satisfaction.</p>    
+            </div>
+        </div>
+        <div class="about-site">
+            <div class="content">
+                <h2>About Site Settings...</h2>
+                <p><i class="fa-solid fa-shop"></i> Navigate to Shop</p>
+                <p><i class="fa-solid fa-search"></i> Enable product search</p>
+                <p><i class="fa-solid fa-filter"></i> Enable product filter</p>
+                <p><i class="fa-solid fa-user"></i> Navigate to Register & Login Page</p>
+                <p><i class="fa-solid fa-shopping-cart"></i> See the products that stored in cart</p>
+            </div>
+            <div class="image">
+                <img src="/static/images/index-page/info-banner.jpg" alt="info-banner">
+            </div>
+        </div>
+        <div class="deliver">
+            <div class="image">
+                <img src="/static/images/index-page/delivery-banner.jpg" alt="deliver-banner">
+            </div>
+            <div class="content">
+                <h2>About our Delivery Service...</h2>
+                <p>
+                    Our e-commerce delivery service ensures fast, reliable, and secure shipping for all online orders.<br><br>
+                    Key features include:<br>
+                    <span>Real-Time Tracking:</span> Customers can monitor their orders from dispatch to doorstep.<br>
+                    <span>Flexible Delivery Options:</span> Choose from express, scheduled, or contactless delivery.<br>
+                    <span>Secure Packaging:</span> Ensuring products arrive in perfect condition.<br>
+                    <span>Global Shipping:</span> Expanding reach with international delivery services.<br>
+                    <span>Easy Returns:</span> Hassle-free return process for customer convenience.
+                </p>
+            </div>
+        </div>
+        <div class="return">
+            <div class="content">
+                <h2>About our Return Policy...</h2>
+                <p>We strive to ensure customer satisfaction with every purchase. If you are not completely happy with your order, our hassle-free return policy allows for easy returns and exchanges.<br><br>
+                    Key Highlights:<br>
+                    ✅ <span>Return Window:</span> Items can be returned within [X] days of delivery.<br>
+                    ✅ <span>Eligibility:</span> Products must be unused, in original packaging, and include all accessories.<br>
+                    ✅ <span>Easy Process:</span> Initiate a return through your account or contact our support team.<br>
+                    ✅ <span>Refund Options:</span> Choose between a full refund, store credit, or an exchange.<br>
+                    ✅ <span>Free Returns:</span> We offer free return shipping for eligible products.<br>
+                    Exceptions: Some items, such as perishable goods, personal care items, and customized products, may not be eligible for returns.<br><br>
+                    For full details, please visit our <a href="#">[Return Policy Page]</a> or contact our customer support team. </p>
+            </div>
+            <div class="image">
+                <img src="/static/images/index-page/return-banner.jpg" alt="return banner">
+            </div>
+        </div>
+        <div class="customer-support">
+            <div class="image">
+                <img src="/static/images/index-page/customer-support.jpg" alt="customer-support-banner">
+            </div>
+            <div class="content">
+                <h2>About our Customer Support...</h2>
+                <p>
+                We are here to assist you with any questions, concerns, or issues. Our dedicated customer support team ensures a seamless shopping experience.<br><br>
+                How to Reach Us:<br>
+                📞 <span>Call Support:</span> Call us at 044-123456789 (Available 9.00am - 9.00pm)<br>
+                📧 <span>Email Support:</span> Reach out at customercare@shopeasy.com (Response within 5 hours)<br>
+                📱 <span>Social Media:</span> Connect with us on <a href="#"><i class="fa-brands fa-facebook"></i></a> <a href="#"><i class="fa-brands fa-x-twitter"></i></a> <a href="#"><i class="fa-brands fa-instagram"></i></a> for quick assistance.<br>
+                🎧 <span>Help Center:</span> Visit our <a href="#">[FAQ & Help Page]</a> for self-service solutions.<br><br>
+                We value our customers and are committed to providing prompt, friendly, and effective support! 💙
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        &copy;2025 ShopEasy. All rights reserved.
+    </footer>
+
+    <div id="cart-section" class="cart-section">
+        <i id="cart-close" class="fa-solid fa-close"></i>
+        <div id="cart-products"></div>
+        
+        <div class="cart-buttons">
+            <button id="clear-cart">Clear</button>
+            <a class="button" href="/checkout">Checkout</a>
+        </div>
+    </div>
+    
+    <script src="/static/script.js" defer></script>
+</body>
+</html>

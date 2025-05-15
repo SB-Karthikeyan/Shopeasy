@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="icon" href="/static/images/website-icon.png">
+        <link rel="stylesheet" href="/static/style.css" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <title>Registration/Login</title>
+    </head>
+</head>
+<body>
+    <div id="preloader-page">
+        <div class="video">
+            <video src="/static/images/logo-preloader.mp4" autoplay muted loop playsinline></video>
+        </div>
+    </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <main>
+        <a href="/" class="skip" tabindex="0">Skip <i class="fa-solid fa-arrow-right"></i></a>
+        <div class="form-container">
+            <div id="banner" class="banner"></div>
+            <form action="/login" method="POST" class="form" id="login-form">
+                <h2>Login</h2>
+                <label for="login-email">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" name="email" id="login-email" placeholder="Email" required>
+                </label>
+                <label for="login-password" class="password">
+                    <i class="fa-solid fa-lock"></i>
+                    <div class="password-icon">
+                        <input class="password-field" id="login-password" name="password" type="password" placeholder="Password" autocomplete="off" required minlength="8">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                </label>
+                <div class="buttons">
+                    <button type="reset">Reset</button>
+                    <button type="submit">Login</button>
+                </div>
+                <p>Don't have an account? <span id="signup-btn"> Sign up for free!</span></p>
+            </form>
+
+
+            <form action="/register" method="POST" class="form" id="registration-form">
+                {% if is_admin %}
+                    <p style="color:#fff; margin-bottom: 1em;font-style: italic;">Note: This user will add as a Admin</p>
+                {% endif %}
+                <h2>Registration</h2>
+                <label for="registration-name">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" name="name" id="registration-name" placeholder="Username" autocomplete="off" required>
+                </label>
+                <label for="registration-email">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" name="email" id="registration-email" placeholder="Email" autocomplete="on" required>
+                </label>
+                <label for="registration-password" class="password">
+                    <i class="fa-solid fa-lock"></i>
+                    <div class="password-icon">
+                        <input class="password-field" id="registration-password" name="password" type="password" placeholder="Set Password" autocomplete="off" required minlength="8">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                </label>
+
+                {% if is_admin %}
+                    <input type="hidden" name="role" value="admin">
+                {% endif %}
+
+                <div class="buttons">
+                    <button type="reset">Reset</button>
+                    <button type="submit">Register</button>
+                </div>
+                <p>Already have an account? <span id="login-btn"> Login!</span></p>
+            </form>
+        </div>
+    </main>
+
+    <script defer>
+        window.addEventListener("load", function(){
+            setTimeout(function(){
+                document.getElementById("preloader-page").style.display = "none";
+            }, 1000);
+        });
+            
+        // Function to handle password visibility toggle
+        document.querySelectorAll('.password-icon').forEach(container => {
+            const input = container.querySelector('.password-field');
+            const icon = container.querySelector('i');
+    
+            icon.addEventListener('click', () => {
+                const isPassword = input.type === 'password';
+                input.type = isPassword ? 'text' : 'password';
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            });
+        });
+    
+
+        
+        let loginBtn = document.getElementById('login-btn');
+        let loginForm = document.getElementById('login-form');
+        let signUpBtn = document.getElementById('signup-btn');
+        let registrationForm = document.getElementById('registration-form');
+        
+        loginBtn.addEventListener('click', () => {
+            loginForm.style.display = 'flex';
+            registrationForm.style.display = 'none';
+        });
+        signUpBtn.addEventListener('click', () => {
+            registrationForm.style.display = 'flex';
+            loginForm.style.display = 'none';
+        });
+        
+
+    </script>
+</body>
+</html>
